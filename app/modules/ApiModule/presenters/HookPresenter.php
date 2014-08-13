@@ -17,10 +17,13 @@ class HookPresenter extends BasePresenter
 
 	public function actionDefault($type = NULL)
 	{
-		$data = [
-			'text' => $this->bot->run($this->getHttpRequest(), $type),
-			'parse' => 'full',
-		];
-		$this->sendResponse(new JsonResponse($data));
+		if($text = $this->bot->run($this->getHttpRequest(), $type)) {
+			$this->sendResponse(new JsonResponse([
+				'text' => $text,
+				'parse' => 'full',
+			]));
+		} else {
+			die;
+		}
 	}
 }

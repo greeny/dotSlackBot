@@ -34,6 +34,10 @@ class Bot extends Object
 		$data = array_values(array_filter(explode(' ', $command)));
 		if($count = count($data)) {
 			$command = new Command($data);
+			$c = $command->getCommand();
+			if($c === 'bot' || $c === 'dotBot' || $c === 'dotbot') {
+				return NULL;
+			}
 
 			$chosenAction = NULL;
 			$priority = -1;

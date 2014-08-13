@@ -61,7 +61,7 @@ class Bot extends Object
 				}
 			}
 			if($chosenAction) {
-				return $chosenAction->run($command, $request);
+				return $chosenAction->run($command, $request, $this);
 			}
 		}
 

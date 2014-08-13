@@ -57,6 +57,6 @@ class HelpAction implements IAction
 	 */
 	function getDescription()
 	{
-		return "dotBot help - shows help for each command";
+		return "_dotBot help_ - shows help for each command";
 	}
 }

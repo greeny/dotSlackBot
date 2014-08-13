@@ -51,6 +51,6 @@ class HelloAction implements IAction
 	 */
 	public function getDescription()
 	{
-		return "dotBot hello - greets dotBot";
+		return "_dotBot hello_ - greets dotBot";
 	}
 }

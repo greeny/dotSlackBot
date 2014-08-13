@@ -54,6 +54,7 @@ class UtilsAction implements IAction
 	 */
 	function getDescription()
 	{
-		return 'dotBot time - prints current time\ndotBot date - prints current date';
+		return '_dotBot time_ - prints current time
+	_dotBot date_ - prints current date';
 	}
 }

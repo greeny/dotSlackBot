@@ -27,10 +27,12 @@ services:
 	- LeanMapper\DefaultEntityFactory
 
 	helloAction: greeny\SlackBot\HelloAction
+	helpAction: greeny\SlackBot\HelpAction
 	utilsAction: greeny\SlackBot\UtilsAction
 
 	- greeny\SlackBot\Bot([
 		@helloAction,
+		@helpAction,
 		@utilsAction
 	])
 

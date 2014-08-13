@@ -20,6 +20,19 @@ class Bot extends Object
 		$this->actions = $actions;
 	}
 
+	/**
+	 * @return IAction[]
+	 */
+	public function getActions()
+	{
+		return $this->actions;
+	}
+
+	/**
+	 * @param IRequest $request
+	 * @param string   $type
+	 * @return null|string
+	 */
 	public function run(IRequest $request, $type)
 	{
 		if($request->getPost('user_id') === self::ID) {
@@ -42,7 +55,7 @@ class Bot extends Object
 			$chosenAction = NULL;
 			$priority = -1;
 
-			foreach($this->actions as $action) {
+			foreach($this->getActions() as $action) {
 				if($action->match($command) && $action->getPriority() > $priority) {
 					$chosenAction = $action;
 				}

@@ -43,7 +43,9 @@ class Bot extends Object
 					$chosenAction = $action;
 				}
 			}
-			return $chosenAction->run($command, $request);
+			if($chosenAction) {
+				return $chosenAction->run($command, $request);
+			}
 		}
 
 		return 'Invalid command!';

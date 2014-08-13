@@ -17,6 +17,6 @@ class Bot extends Object
 
 	public function run(IRequest $request, $type)
 	{
-		return 'dotSlackBot is working!';
+		return serialize($request->getPost());//'dotSlackBot is working!';
 	}
 }

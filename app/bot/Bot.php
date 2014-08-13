@@ -34,18 +34,18 @@ class Bot extends Object
 		$data = array_values(array_filter(explode(' ', $command)));
 		if($count = count($data)) {
 			$command = new Command($data);
-		}
 
-		$chosenAction = NULL;
-		$priority = -1;
+			$chosenAction = NULL;
+			$priority = -1;
 
-		foreach($this->actions as $action) {
-			if($action->match($command) && $action->getPriority() > $priority) {
-				$chosenAction = $action;
+			foreach($this->actions as $action) {
+				if($action->match($command) && $action->getPriority() > $priority) {
+					$chosenAction = $action;
+				}
 			}
+			return $chosenAction->run($command, $request);
 		}
-		$chosenAction->run($command, $request);
 
-		return 'dotSlackBot is working!';
+		return 'Invalid command!';
 	}
 }

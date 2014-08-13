@@ -52,6 +52,6 @@ class Bot extends Object
 			}
 		}
 
-		return 'Invalid command!';
+		return 'Invalid command! (User id = ' . $request->getPost('user_id') . ')';
 	}
 }

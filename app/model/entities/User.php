@@ -3,7 +3,7 @@
  * @author Tomáš Blatný
  */
 
-namespace Sandbox\Model;
+namespace greeny\SlackBot\Model;
 
 /**
  * @property int $id
@@ -15,4 +15,3 @@ namespace Sandbox\Model;
 class User extends BaseEntity {
 
 }
- 

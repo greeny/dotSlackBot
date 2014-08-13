@@ -3,7 +3,7 @@
  * @author Tomáš Blatný
  */
 
-namespace Sandbox\Security;
+namespace greeny\SlackBot\Security;
 
 class PasswordHasher {
 	public static function hashPassword($nick, $password, $salt)
@@ -22,4 +22,3 @@ class PasswordHasher {
 		return hash($method, $salt . '$' . $string . '$' . $salt);
 	}
 }
- 

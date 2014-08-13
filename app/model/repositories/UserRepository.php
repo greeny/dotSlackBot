@@ -3,12 +3,12 @@
  * @author Tomáš Blatný
  */
 
-namespace Sandbox\Model;
+namespace greeny\SlackBot\Model;
 
 use Nette\Utils\ArrayHash;
 use Nette\Security\AuthenticationException;
 use Nette\Utils\Strings;
-use Sandbox\Security\PasswordHasher;
+use greeny\SlackBot\Security\PasswordHasher;
 
 class UserRepository extends BaseRepository {
 

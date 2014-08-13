@@ -3,14 +3,14 @@
  * @author Tomáš Blatný
  */
 
-namespace Sandbox\Security;
+namespace greeny\SlackBot\Security;
 
 use Nette\Object;
 use Nette\Security\AuthenticationException;
 use Nette\Security\IAuthenticator;
 use Nette\Security\Identity;
 use Nette\Security\IIdentity;
-use Sandbox\Model\UserRepository;
+use greeny\SlackBot\Model\UserRepository;
 
 class Authenticator extends Object implements IAuthenticator {
 
@@ -42,4 +42,3 @@ class Authenticator extends Object implements IAuthenticator {
 		return new Identity($user->id, $user->role, $user->getData());
 	}
 }
- 

@@ -3,7 +3,7 @@
  * @author Tomáš Blatný
  */
 
-namespace Sandbox\Security;
+namespace greeny\SlackBot\Security;
 
 use Nette\Security\Permission;
 
@@ -28,4 +28,3 @@ class Authorizator extends Permission {
 		$this->allow('owner');
 	}
 }
- 

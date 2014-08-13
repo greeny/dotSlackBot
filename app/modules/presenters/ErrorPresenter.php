@@ -1,6 +1,6 @@
 <?php
 
-namespace Sandbox;
+namespace greeny\SlackBot;
 
 use Nette\Application\BadRequestException;
 use Nette\Diagnostics\Debugger;

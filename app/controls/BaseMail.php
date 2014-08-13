@@ -2,7 +2,7 @@
 /**
  * @author Tomáš Blatný
  */
-namespace Sandbox\Controls;
+namespace greeny\SlackBot\Controls;
 
 abstract class BaseMail extends MailControl {
 	protected $subject;

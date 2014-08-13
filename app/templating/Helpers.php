@@ -2,7 +2,7 @@
 /**
  * @author Tomáš Blatný
  */
-namespace Sandbox\Templating;
+namespace greeny\SlackBot\Templating;
 
 use Nette\Bridges\ApplicationLatte\Template;
 use Nette\Object;

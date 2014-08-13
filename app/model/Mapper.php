@@ -3,11 +3,10 @@
  * @author Tomáš Blatný
  */
 
-namespace Sandbox\Model;
+namespace greeny\SlackBot\Model;
 
 use LeanMapper\DefaultMapper;
 
 class Mapper extends DefaultMapper {
-	protected $defaultEntityNamespace = '\\Sandbox\\Model';
+	protected $defaultEntityNamespace = '\\greeny\SlackBot\\Model';
 }
- 

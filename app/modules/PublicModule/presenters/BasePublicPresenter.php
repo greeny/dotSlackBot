@@ -3,11 +3,10 @@
  * @author Tomáš Blatný
  */
 
-namespace Sandbox\PublicModule;
+namespace greeny\SlackBot\PublicModule;
 
-use Sandbox\BasePresenter;
+use greeny\SlackBot\BasePresenter;
 
 class BasePublicPresenter extends BasePresenter {
 
 }
- 

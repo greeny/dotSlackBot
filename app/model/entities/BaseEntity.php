@@ -3,7 +3,7 @@
  * @author Tomáš Blatný
  */
 
-namespace Sandbox\Model;
+namespace greeny\SlackBot\Model;
 
 use LeanMapper\Entity;
 use Nette\Utils\ArrayHash;

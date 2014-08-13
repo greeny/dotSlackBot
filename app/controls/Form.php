@@ -2,7 +2,7 @@
 /**
  * @author Tomáš Blatný
  */
-namespace Sandbox\Controls;
+namespace greeny\SlackBot\Controls;
 
 use Nette\Application\UI\Form as NForm;
 use Nette\Forms\Controls;

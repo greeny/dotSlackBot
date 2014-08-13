@@ -1,6 +1,6 @@
 <?php
 
-namespace Sandbox\Controls;
+namespace greeny\SlackBot\Controls;
 
 use Cards\Controls\Mail;
 use	Nette\NotSupportedException;

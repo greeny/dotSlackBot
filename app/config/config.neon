@@ -14,7 +14,7 @@ nette:
 	application:
 		errorPresenter: Error
 		mapping:
-			*: Sandbox\*Module\*Presenter
+			*: greeny\SlackBot\*Module\*Presenter
 
 	session:
 		expiration: 14 days
@@ -23,13 +23,15 @@ nette:
 services:
 	connection:
 		class: LeanMapper\Connection( %database%, ... )
-	- Sandbox\Model\Mapper
+	- greeny\SlackBot\Model\Mapper
 	- LeanMapper\DefaultEntityFactory
 
-	- Sandbox\Model\UserRepository
+	- greeny\SlackBot\Bot
 
-	- Sandbox\Security\Authenticator
-	- Sandbox\Security\Authorizator
+	- greeny\SlackBot\Model\UserRepository
 
-	- Sandbox\Routing\RouterFactory
-	router: @Sandbox\Routing\RouterFactory::createRouter
+	- greeny\SlackBot\Security\Authenticator
+	- greeny\SlackBot\Security\Authorizator
+
+	- greeny\SlackBot\Routing\RouterFactory
+	router: @greeny\SlackBot\Routing\RouterFactory::createRouter

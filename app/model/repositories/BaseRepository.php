@@ -3,7 +3,7 @@
  * @author Tomáš Blatný
  */
 
-namespace Sandbox\Model;
+namespace greeny\SlackBot\Model;
 
 use LeanMapper\Repository;
 use Nette\Utils\Paginator;
@@ -58,4 +58,3 @@ class BaseRepository extends Repository {
 			->count;
 	}
 }
- 

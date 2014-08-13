@@ -1,9 +1,9 @@
 <?php
 
-namespace Sandbox;
+namespace greeny\SlackBot;
 
-use Sandbox\Templating\Helpers;
-use Sandbox\Controls\Form;
+use greeny\SlackBot\Templating\Helpers;
+use greeny\SlackBot\Controls\Form;
 use Nette\Application\UI\Presenter;
 
 abstract class BasePresenter extends Presenter

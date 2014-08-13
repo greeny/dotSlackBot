@@ -1,0 +1,22 @@
+{
+	"name": "greeny/sandbox",
+	"description": "Sandbox for all Nette projects.",
+	"homepage": "http://blatny.org",
+	"type": "project",
+	"license": ["MIT"],
+	"authors": [
+		{
+			"name": "Tomáš Blatný",
+			"homepage": "http://blatny.org"
+		}
+	],
+	"require": {
+		"php": ">= 5.3.0",
+		"nette/nette": "v2.2.1",
+        "tharos/leanmapper": "v2.1.0",
+        "dg/texy": "v2.3"
+	},
+	"require-dev": {
+		"nette/tester": "~0.9.5"
+	}
+}

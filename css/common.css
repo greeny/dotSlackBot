@@ -1,0 +1,260 @@
+/* Custom style */
+
+body {
+	margin-top: 50px;
+}
+
+/* FSHL style */
+
+.php-keyword1 {
+	color: #e03c3c;
+	font-weight: bold
+}
+
+.php-keyword2 {
+	color: #e03c3c
+}
+
+.php-var {
+	color: #d59401;
+	font-weight: bold
+}
+
+.php-num {
+	color: #cd0673
+}
+
+.php-quote {
+	color: green
+}
+
+.php-vquote {
+	color: #0F0;
+	font-weight: bold
+}
+
+.php-comment {
+	color: #929292
+}
+
+.html-tag {
+	color: #559d00;
+	font-weight: bold
+}
+
+.html-tagin {
+	color: #89a315
+}
+
+.html-quote {
+	color: #448ccb;
+	font-weight: bold
+}
+
+.html-comment {
+	color: #929292
+}
+
+.html-entity {
+	color: #89a315
+}
+
+.css-class {
+	color: #004a80
+}
+
+.css-id {
+	color: #7da7d9;
+	font-weight: bold
+}
+
+.css-def {
+	color: #5674b9
+}
+
+.css-property {
+	color: #003663;
+	font-weight: bold
+}
+
+.css-value {
+	color: #448ccb
+}
+
+.css-color {
+	color: #007800
+}
+
+.css-comment {
+	color: #929292
+}
+
+.cpp-keywords1 {
+	color: blue;
+	font-weight: bold
+}
+
+.cpp-num {
+	color: red
+}
+
+.cpp-quote {
+	color: brown;
+	font-weight: bold
+}
+
+.cpp-comment {
+	color: green
+}
+
+.cpp-preproc {
+	color: grey
+}
+
+.java-keywords1 {
+	color: blue;
+	font-weight: bold
+}
+
+.java-num {
+	color: red
+}
+
+.java-quote {
+	color: brown;
+	font-weight: bold
+}
+
+.java-comment {
+	color: #929292
+}
+
+.java-preproc {
+	color: grey
+}
+
+.js-out {
+	color: #448ccb
+}
+
+.js-keywords1 {
+	color: #003663;
+	font-weight: bold
+}
+
+.js-num {
+	color: red
+}
+
+.js-quote {
+	color: brown
+}
+
+.js-comment {
+	color: #929292;
+	font-style: italic
+}
+
+.sql-keyword1 {
+	color: #e03c3c
+}
+
+.sql-keyword2 {
+	color: #e03c3c
+}
+
+.sql-keyword3 {
+	color: #e03c3c;
+	font-weight: bold
+}
+
+.sql-value {
+	color: #366cde
+}
+
+.sql-comment {
+	color: #929292
+}
+
+.sql-num {
+	color: #d59401;
+	font-weight: bold
+}
+
+.sql-option {
+	color: #004a80;
+	font-weight: bold
+}
+
+.py-keyword1 {
+	color: #03c;
+	font-weight: bold
+}
+
+.py-keyword2 {
+	color: #ce3333;
+	font-weight: bold
+}
+
+.py-keyword3 {
+	color: #606;
+	font-weight: bold
+}
+
+.py-number {
+	color: #930
+}
+
+.py-docstring {
+	color: #e86a18
+}
+
+.py-quote {
+	color: #878787;
+	font-weight: bold
+}
+
+.py-comment {
+	color: #929292;
+	font-style: italic
+}
+
+.texy-hlead {
+	color: #44B;
+	font-weight: bold
+}
+
+.texy-hbody {
+	background-color: #eeF;
+	color: #44B
+}
+
+.texy-hr {
+	color: #B44
+}
+
+.texy-code {
+	color: #666
+}
+
+.texy-html {
+	color: #6a6
+}
+
+.texy-text {
+	color: #66a
+}
+
+.texy-err {
+	background-color: red;
+	color: white
+}
+
+.xlang {
+	color: #666
+}
+
+.count {
+	color: black;
+	background-color: #FFF
+}

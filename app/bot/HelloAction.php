@@ -26,7 +26,7 @@ class HelloAction implements IAction
 	 */
 	public function run(Command $command, IRequest $request)
 	{
-		return 'Hello ' . $request->getPost('user_name') . '!';
+		return 'Hello @' . $request->getPost('user_name') . '!';
 	}
 
 	/**

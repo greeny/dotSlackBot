@@ -27,9 +27,11 @@ services:
 	- LeanMapper\DefaultEntityFactory
 
 	helloAction: greeny\SlackBot\HelloAction
+	utilsAction: greeny\SlackBot\UtilsAction
 
 	- greeny\SlackBot\Bot([
-		@helloAction
+		@helloAction,
+		@utilsAction
 	])
 
 	- greeny\SlackBot\Model\UserRepository

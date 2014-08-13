@@ -26,7 +26,7 @@ class Bot extends Object
 			die;
 		}
 
-		$command = $request->getPost('text');
+		$command = strtolower($request->getPost('text'));
 		if($type === NULL) { // with prefix
 			$command = str_replace($request->getPost('trigger_word'), '', $command);
 		}
@@ -52,6 +52,6 @@ class Bot extends Object
 			}
 		}
 
-		return 'Invalid command! (User id = ' . $request->getPost('user_id') . ')';
+		return 'Invalid command!';
 	}
 }

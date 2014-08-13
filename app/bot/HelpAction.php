@@ -29,9 +29,9 @@ class HelpAction implements IAction
 		$return = '';
 		foreach($bot->getActions() as $action) {
 			$return .= '*' . $action->getName() . '*
-			' . $action->getDescription() . '
-			-----
-			';
+	' . $action->getDescription() . '
+-----
+';
 		}
 		return $return;
 	}

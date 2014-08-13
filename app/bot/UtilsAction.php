@@ -24,9 +24,10 @@ class UtilsAction implements IAction
 	/**
 	 * @param Command  $command
 	 * @param IRequest $request
+	 * @param Bot      $bot
 	 * @return string
 	 */
-	function run(Command $command, IRequest $request)
+	function run(Command $command, IRequest $request, Bot $bot)
 	{
 		$date = $command->getCommand() === 'date';
 		return 'Current ' . ($date ? 'date' : 'time') . ' is ' . date($date ? 'j.n.Y' : 'G:i:s');

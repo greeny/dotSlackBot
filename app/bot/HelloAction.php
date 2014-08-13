@@ -20,11 +20,12 @@ class HelloAction implements IAction
 	}
 
 	/**
-	 * @param Command $command
+	 * @param Command  $command
 	 * @param IRequest $request
+	 * @param Bot      $bot
 	 * @return string
 	 */
-	public function run(Command $command, IRequest $request)
+	public function run(Command $command, IRequest $request, Bot $bot)
 	{
 		return 'Hello @' . $request->getPost('user_name') . '!';
 	}

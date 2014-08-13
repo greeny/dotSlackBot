@@ -9,14 +9,6 @@ use Nette\Http\IRequest;
 
 class HelpAction implements IAction
 {
-	/** @var \greeny\SlackBot\Bot */
-	private $bot;
-
-	public function __construct(Bot $bot)
-	{
-		$this->bot = $bot;
-	}
-
 	/**
 	 * @param Command $command
 	 * @return bool
@@ -29,12 +21,13 @@ class HelpAction implements IAction
 	/**
 	 * @param Command  $command
 	 * @param IRequest $request
+	 * @param Bot      $bot
 	 * @return string
 	 */
-	function run(Command $command, IRequest $request)
+	function run(Command $command, IRequest $request, Bot $bot)
 	{
 		$return = '';
-		foreach($this->bot->getActions() as $action) {
+		foreach($bot->getActions() as $action) {
 			$return .= '*' . $action->getName() . '*\n' . $action->getDescription() . '\n-----\n';
 		}
 		return $return;

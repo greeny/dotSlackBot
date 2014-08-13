@@ -22,11 +22,12 @@ interface IAction
 	function match(Command $command);
 
 	/**
-	 * @param Command $command
+	 * @param Command  $command
 	 * @param IRequest $request
+	 * @param Bot      $bot
 	 * @return string
 	 */
-	function run(Command $command, IRequest $request);
+	function run(Command $command, IRequest $request, Bot $bot);
 
 	/**
 	 * @return int

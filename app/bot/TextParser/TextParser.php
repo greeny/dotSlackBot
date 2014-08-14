@@ -9,6 +9,7 @@ use greeny\SlackBot\Bot;
 use greeny\SlackBot\Command;
 use Latte\Object;
 use Nette\Http\Request;
+use Nette\Utils\Strings;
 
 class TextParser extends Object
 {
@@ -26,16 +27,25 @@ class TextParser extends Object
 		$this->userName = '@' . $request->getPost('user_name');
 		$this->request = $request;
 		$this->bot = $bot;
-		$return = $this->parseText($command->getRaw());
+		$return = self::parseText($command->getRaw());
+		if($return === NULL) {
+			$return = "Sorry, $this->userName, I don't understand you. Try different question please.";
+		}
 		$this->bot = NULL;
 		$this->request = NULL;
 		$this->userName = NULL;
 		return $return;
 	}
 
-	private function parseText($text)
+	public static function parseText($text)
 	{
-
-		return "Sorry, I don't understand you. Try different question please.";
+		$pos = NULL;
+		if($pos = WordFinder::findWords($text, 'what', 'is')) {
+			$search = str_replace(' ', '_', trim(Strings::replace(substr($text, $pos - 1), '~\s([a-z]{1,1})~', function($match) {
+				return ' '.trim(strtoupper($match[0]));
+			})));
+			return "https://en.wikipedia.org/wiki/$search";
+		}
+		return NULL;
 	}
 }

@@ -17,8 +17,17 @@ class Command extends Object
 
 	private $command;
 
-	public function __construct(array $data)
+	private $raw;
+
+	public function __construct($text, $type, $triggerWord)
 	{
+		$command = strtolower($text);
+		if($type === NULL) { // with prefix
+			$command = str_replace(strtolower($triggerWord), '', $command);
+		}
+		$this->raw = $command;
+		$data = array_values(array_filter(explode(' ', $command)));
+
 		$this->command = $data[0];
 		unset($data[0]);
 		$data = array_values($data);
@@ -74,5 +83,10 @@ class Command extends Object
 	public function getCommand()
 	{
 		return $this->command;
+	}
+
+	public function getRaw()
+	{
+		return $this->raw;
 	}
 }

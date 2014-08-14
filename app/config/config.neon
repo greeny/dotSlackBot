@@ -26,10 +26,13 @@ services:
 	- greeny\SlackBot\Model\Mapper
 	- LeanMapper\DefaultEntityFactory
 
+	- greeny\SlackBot\TextParser\TextParser
+
 	- greeny\SlackBot\HelloAction
 	- greeny\SlackBot\HelpAction
 	- greeny\SlackBot\UtilsAction
 	- greeny\SlackBot\GithubAction
+	- greeny\SlackBot\TextAction
 
 	- greeny\Api\Drivers\CurlDriver
 	- greeny\SlackBot\Github\Github(%github%)

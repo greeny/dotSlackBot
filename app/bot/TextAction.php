@@ -5,10 +5,18 @@
 
 namespace greeny\SlackBot;
 
+use greeny\SlackBot\TextParser\TextParser;
 use Nette\Http\IRequest;
 
-class UtilsAction implements IAction
+class TextAction implements IAction
 {
+	/** @var \greeny\SlackBot\TextParser\TextParser */
+	private $parser;
+
+	public function __construct(TextParser $parser)
+	{
+		$this->parser = $parser;
+	}
 
 	/**
 	 * @param Command $command
@@ -16,9 +24,7 @@ class UtilsAction implements IAction
 	 */
 	function match(Command $command)
 	{
-		return in_array($command->getCommand(), [
-			'time', 'date'
-		]);
+		return TRUE;
 	}
 
 	/**
@@ -29,8 +35,7 @@ class UtilsAction implements IAction
 	 */
 	function run(Command $command, IRequest $request, Bot $bot)
 	{
-		$date = $command->getCommand() === 'date';
-		return 'Current ' . ($date ? 'date' : 'time') . ' is ' . date($date ? 'j.n.Y' : 'G:i:s');
+		return $this->parser->parse($command, $request, $bot);
 	}
 
 	/**
@@ -38,7 +43,7 @@ class UtilsAction implements IAction
 	 */
 	function getPriority()
 	{
-		return self::PRIORITY_LOW;
+		return self::PRIORITY_NONE;
 	}
 
 	/**
@@ -46,7 +51,7 @@ class UtilsAction implements IAction
 	 */
 	function getName()
 	{
-		return 'Utils';
+		return "Text";
 	}
 
 	/**
@@ -54,7 +59,6 @@ class UtilsAction implements IAction
 	 */
 	function getDescription()
 	{
-		return '_dotBot time_ - prints current time
-	_dotBot date_ - prints current date';
+		return "Write any text and see what does dotBot respond.";
 	}
 }

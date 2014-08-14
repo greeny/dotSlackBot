@@ -42,30 +42,22 @@ class Bot extends Object
 			die;
 		}
 
-		$command = strtolower($request->getPost('text'));
-		if($type === NULL) { // with prefix
-			$command = str_replace(strtolower($request->getPost('trigger_word')), '', $command);
+		$command = new Command($request->getPost('text'), $type, $request->getPost('trigger_word'));
+		$c = $command->getCommand();
+		if($c === 'bot' || $c === 'dotBot' || $c === 'dotbot') {
+			return NULL;
 		}
 
-		$data = array_values(array_filter(explode(' ', $command)));
-		if($count = count($data)) {
-			$command = new Command($data);
-			$c = $command->getCommand();
-			if($c === 'bot' || $c === 'dotBot' || $c === 'dotbot') {
-				return NULL;
-			}
+		$chosenAction = NULL;
+		$priority = -1;
 
-			$chosenAction = NULL;
-			$priority = -1;
-
-			foreach($this->getActions() as $action) {
-				if($action->match($command) && $action->getPriority() > $priority) {
-					$chosenAction = $action;
-				}
+		foreach($this->getActions() as $action) {
+			if($action->match($command) && $action->getPriority() > $priority) {
+				$chosenAction = $action;
 			}
-			if($chosenAction) {
-				return $chosenAction->run($command, $request, $this);
-			}
+		}
+		if($chosenAction) {
+			return $chosenAction->run($command, $request, $this);
 		}
 
 		return 'Invalid command!';

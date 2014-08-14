@@ -35,7 +35,7 @@ class HelloAction implements IAction
 	 */
 	public function getPriority()
 	{
-		return self::PRIORITY_NONE;
+		return self::PRIORITY_LOW;
 	}
 
 	/**

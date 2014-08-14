@@ -83,6 +83,37 @@ class TextParser extends Object
 				$return .= "\n - <http://stackoverflow.com$match[1]|$match[2]>";
 			}
 			return $return;
+		} else if(($pos = WordFinder::findWords($text, 'show', 'docs', 'for')) || ($pos = WordFinder::findWords($text, 'show', 'doc', 'for')) || ($pos = WordFinder::findWords($text, 'show', 'documentation', 'for')) ||
+			($pos = WordFinder::findWords($text, 'show', 'docs')) || ($pos = WordFinder::findWords($text, 'show', 'doc')) || ($pos = WordFinder::findWords($text, 'show', 'documentation'))) {
+			$search = str_replace(' ', '_', trim(substr($text, $pos - 1)));
+			if((strpos($search, $ch = '::') !== FALSE) || (strpos($search, $ch = '->') !== FALSE)) {
+				// find in Nette documentation
+			} else {
+				$phpPage = $this->api->createUrlRequest("http://cz2.php.net/$search")->send();
+				if($phpPage === '') {
+					return 'Sorry, I couldn\'t find such a function. Try searching <http://php.net/search.php?pattern=' . $search . '|php.net> yourself.';
+				} else {
+					$method = Strings::match($phpPage, '~<h1 class="refname">(.*?)</h1>~')[1];
+					$version = Strings::match($phpPage, '~<p class="verinfo">(.*?)</p>~')[1];
+					$start = strpos($phpPage, '<p class="refpurpose">');
+					$end = strpos(substr($phpPage, $start), '</p>');
+					$description = trim(strip_tags(substr($phpPage, $start, $end)));
+					$description = trim(substr($description, strpos($description, '&mdash;') + strlen('&mdash;')));
+					$start = strpos($phpPage, '<div class="methodsynopsis dc-description">');
+					$end = strpos(substr($phpPage, $start), '</div>');
+					$signature = trim(strip_tags(substr($phpPage, $start, $end)));
+					$signature = str_replace("\n", '', $signature);
+					$start = strpos($phpPage, '<div class="refsect1 parameters"');
+					$end = strpos(substr($phpPage, $start), '</div>') + 6;
+					$doc = str_replace("\n", '', substr($phpPage, $start, $end));
+					$params = Strings::matchAll($doc, '~<dt>.*?<code class="parameter">(.*?)</code>.*?</dt>.*?<dd>.*?<p class="para">(.*?)</p>.*?</dd>~');
+					$return = "*$method* _{$version}_\n$description.\n\n*$signature*";
+					foreach($params as $param) {
+						$return .= "\n    _\${$param[1]}_ - " . trim($param[2]);
+					}
+					return $return;
+				}
+			}
 		}
 		return NULL;
 	}

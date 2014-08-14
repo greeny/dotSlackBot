@@ -68,7 +68,7 @@ class TextParser extends Object
 					return '_' . $text[0] . '_';
 				});
 				return strip_tags($text) . "\n" .
-					"-- from Wikipedia, free encyclopedia (<https://en.wikipedia.org/wiki/$search|full article>)";
+					"-- from Wikipedia, free encyclopedia ( <https://en.wikipedia.org/wiki/$search|full article> )";
 			} else {
 				return "I don't know, try http://lmgtfy.com/?q=$search.";
 			}

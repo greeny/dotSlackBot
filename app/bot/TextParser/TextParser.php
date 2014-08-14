@@ -5,6 +5,7 @@
 
 namespace greeny\SlackBot\TextParser;
 
+use greeny\Api\Core;
 use greeny\SlackBot\Bot;
 use greeny\SlackBot\Command;
 use Latte\Object;
@@ -22,12 +23,20 @@ class TextParser extends Object
 	/** @var Bot|NULL */
 	private $bot = NULL;
 
+	/** @var \greeny\Api\Core */
+	private $api;
+
+	public function __construct(Core $core)
+	{
+		$this->api = $core;
+	}
+
 	public function parse(Command $command, Request $request, Bot $bot)
 	{
 		$this->userName = '@' . $request->getPost('user_name');
 		$this->request = $request;
 		$this->bot = $bot;
-		$return = self::parseText($command->getRaw());
+		$return = $this->parseText($command->getRaw());
 		if($return === NULL) {
 			$return = "Sorry, $this->userName, I don't understand you. Try different question please.";
 		}
@@ -37,14 +46,19 @@ class TextParser extends Object
 		return $return;
 	}
 
-	public static function parseText($text)
+	private function parseText($text)
 	{
 		$pos = NULL;
-		if($pos = WordFinder::findWords($text, 'what', 'is')) {
+		if($pos = WordFinder::findWords($text, 'what', 'is') || $pos = WordFinder::findWords($text, 'what', 'could', 'be')) {
 			$search = str_replace(' ', '_', trim(Strings::replace(substr($text, $pos - 1), '~\s([a-z]{1,1})~', function($match) {
 				return ' '.trim(strtoupper($match[0]));
 			})));
-			return "https://en.wikipedia.org/wiki/$search";
+			$search = rtrim($search, '.!?,');
+			
+			$wikiPage = $this->api->createUrlRequest("https://en.wikipedia.org/wiki/$search")->send();
+			$matches = Strings::match($wikiPage, '<p>*</p>');
+			
+			return $matches[0];
 		}
 		return NULL;
 	}

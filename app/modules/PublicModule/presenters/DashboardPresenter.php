@@ -14,31 +14,60 @@ class DashboardPresenter extends BasePublicPresenter
 	public function renderDefault()
 	{
 		Debugger::$maxLen = 1e6;
-		$search = 'htmlspecialchars_decode';
-		$phpPage = $this->api->createUrlRequest("http://cz2.php.net/$search")->send();
-		if($phpPage === '') {
-			$var = 'Not found';
-		} else {
-			$method = Strings::match($phpPage, '~<h1 class="refname">(.*?)</h1>~')[1];
-			$version = Strings::match($phpPage, '~<p class="verinfo">(.*?)</p>~')[1];
-			$start = strpos($phpPage, '<p class="refpurpose">');
-			$end = strpos(substr($phpPage, $start), '</p>');
-			$description = trim(strip_tags(substr($phpPage, $start, $end)));
-			$description = trim(substr($description, strpos($description, '&mdash;') + strlen('&mdash;')));
-			$start = strpos($phpPage, '<div class="methodsynopsis dc-description">');
-			$end = strpos(substr($phpPage, $start), '</div>');
-			$signature = trim(strip_tags(substr($phpPage, $start, $end)));
-			$signature = str_replace("\n", '', $signature);
-			$start = strpos($phpPage, '<div class="refsect1 parameters"');
-			$end = strpos(substr($phpPage, $start), '</div>') + 6;
-			$doc = str_replace("\n", '', substr($phpPage, $start, $end));
-			$params = Strings::matchAll($doc, '~<dt>.*?<code class="parameter">(.*?)</code>.*?</dt>.*?<dd>.*?<p class="para">(.*?)</p>.*?</dd>~');
-			$return = "*$method* _{$version}_\n$description.\n\n*$signature*";
-			foreach($params as $param) {
-				$return .= "\n    _\${$param[1]}_ - " . trim($param[2]);
+		$search = 'request';
+
+		$search = ltrim(str_replace(array(' ', '*', '\\'), array('.*?', '.*?', '\\\\'), $search), '\\');
+		$tree = $this->api->createUrlRequest('http://api.nette.org/2.2.2/index.html')->send();
+		$start = strpos($tree, '<div id="elements">');
+		$end = strpos(substr($tree, $start), '</div>');
+		$elementsPage = substr($tree, $start, $end);
+		$elements = Strings::matchAll($elementsPage, '~<li><a href="(.*?)">.*?' . $search . '(.*?)</a></li>~i');
+		$directMatches = [];
+		$otherMatches = [];
+		$first = TRUE;
+		foreach($elements as $element) {
+			if(trim($element[2]) === '') {
+				$directMatches[] = $element;
+			} else {
+				$otherMatches[] = $element;
 			}
-			$var = $return;
 		}
+		foreach($otherMatches as $match) {
+			$directMatches[] = $match;
+		}
+		$return = "";
+		$counter = 0;
+		foreach($directMatches as $match) {
+			$class = Strings::match($match[0], '~">(.+?)</a>~')[1];
+			if($first) {
+				$first = FALSE;
+				$classPage = $this->api->createUrlRequest("http://api.nette.org/2.2.2/{$match[1]}")->send();
+				if(($start = strpos($classPage, '<table class="summary" id="methods">')) !== NULL) {
+					$end = strpos(substr($classPage, $start), '</table>');
+					$methodsPage = str_replace("\n", '', trim(substr($classPage, $start, $end)));
+					$methods = Strings::matchAll($methodsPage, '~<td class="attributes">(.*?)</td>.*?<a href="(.*?)".*?>(.*?)</a>\((.*?)\).*?<div class="description short">(.*?)</div>~');
+				} else {
+					$methods = array();
+				}
+				$return .= "<http://api.nette.org/2.2.2/{$match[1]}|$class>:";
+				$counter = 0;
+				foreach($methods as $method) {
+					if($counter++ >= 5) break;
+					$returnValue = $this->fixSpaces(trim(strip_tags($method[1])));
+					$href = $this->fixSpaces(trim(strip_tags($method[2])));
+					$methodName = $this->fixSpaces(trim(strip_tags($method[3])));
+					$methodParams = $this->fixSpaces(trim(strip_tags($method[4])));
+					$methodDescription = $this->fixSpaces(trim(strip_tags($method[5])));
+					$return .= "\n    _{$returnValue}_ <http://api.nette.org/2.2.2/$href|$methodName> ($methodParams) - $methodDescription";
+				}
+				$counter = 0;
+				$return .= "\n    ...\n\n*You might also look for:*";
+			} else {
+				if($counter++ >= 5) break;
+				$return .= "\n - <{$match[1]}|$class>";
+			}
+		}
+		$var = $return;
 
 		$this->template->dump = $var;
 	}
@@ -48,5 +77,9 @@ class DashboardPresenter extends BasePublicPresenter
 		return Strings::replace($text, '~<a.*?href="([^"]*?)".*?>(.*?)</a>~', function($text) use($baseLinkHref) {
 			return !Strings::match($text[2], '~\[[0-9]+\]~') ? "<$baseLinkHref{$text[1]}|{$text[2]}>" : '';
 		});
+	}
+
+	private function fixSpaces($text) {
+		return Strings::replace($text, '~[\s]+~', ' ');
 	}
 }

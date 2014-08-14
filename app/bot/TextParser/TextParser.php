@@ -137,7 +137,7 @@ class TextParser extends Object
 						$return .= "\n    ...\n\n*You might also look for:*";
 					} else {
 						if($counter++ >= 5) break;
-						$return .= "\n - <{$match[1]}|$class>";
+						$return .= "\n - <http://api.nette.org/2.2.2/{$match[1]}|$class>";
 					}
 				}
 				return $return;

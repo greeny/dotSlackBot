@@ -173,6 +173,13 @@ class TextParser extends Object
 					return $return;
 				}
 			}
+		} else if(($pos = WordFinder::findWords($text, 'you', 'are', 'awesome')) || ($pos = WordFinder::findWords($text, 'you', 'are', 'great')) ||
+			($pos = WordFinder::findWords($text, 'you', 'are', 'cool')) || ($pos = WordFinder::findWords($text, 'you', 'are', 'good')) ||
+			($pos = WordFinder::findWords($text, 'you', 'are', 'smart')) || ($pos = WordFinder::findWords($text, 'you', 'are', 'clever'))) {
+			return 'Thanks, good to hear!';
+		} else if(($pos = WordFinder::findWords($text, 'thank', 'you')) || ($pos = WordFinder::findWords($text, 'thanks')) ||
+			($pos = WordFinder::findWords($text, 'thx')) || ($pos = WordFinder::findWords($text, 'ty'))) {
+			return "No problem, I am glad i could help!";
 		}
 		return NULL;
 	}

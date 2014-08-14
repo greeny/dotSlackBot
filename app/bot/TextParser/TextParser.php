@@ -69,7 +69,7 @@ class TextParser extends Object
 				});
 				return strip_tags($text);
 			} else {
-				return "I don't know, try https://en.wikipedia.org/wiki/$search.";
+				return "I don't know, try http://lmgtfy.com/?q=$search.";
 			}
 		}
 		return NULL;

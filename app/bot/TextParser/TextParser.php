@@ -36,7 +36,7 @@ class TextParser extends Object
 		$this->userName = '@' . $request->getPost('user_name');
 		$this->request = $request;
 		$this->bot = $bot;
-		$return = $this->parseText($command->getRaw());
+		$return = $this->parseText(strtolower($command->getRaw()));
 		if($return === NULL) {
 			$return = "Sorry, $this->userName, I don't understand you. Try different question please.";
 		}
@@ -49,13 +49,13 @@ class TextParser extends Object
 	private function parseText($text)
 	{
 		$pos = NULL;
-		if($pos = WordFinder::findWords($text, 'what', 'is') || $pos = WordFinder::findWords($text, 'what', 'could', 'be')) {
+		if(($pos = WordFinder::findWords($text, 'what', 'is')) || ($pos = WordFinder::findWords($text, 'what', 'could', 'be'))) {
 			$search = str_replace(' ', '_', trim(Strings::replace(substr($text, $pos - 1), '~\s([a-z]{1,1})~', function($match) {
 				return ' '.trim(strtoupper($match[0]));
 			})));
 			$search = rtrim($search, '.!?,');
 			
-			return $wikiPage = $this->api->createUrlRequest("https://en.wikipedia.org/wiki/$search")->send();
+			$wikiPage = $this->api->createUrlRequest("https://en.wikipedia.org/wiki/$search")->send();
 			$matches = Strings::match($wikiPage, '~<p>(.*?)</p>~');
 			if($text = $matches[1]) {
 				return Strings::replace($text, '~<a.*?>(.*?)</a>', function($text) {

@@ -12,7 +12,7 @@ class WordFinder
 	 */
 	public static function findWords($string)
 	{
-		$string = ' ' . $string . ' ';
+		$string = " $string ";
 		$words = func_get_args();
 		unset($words[0]);
 		$start = 0;
@@ -24,9 +24,9 @@ class WordFinder
 			if($pos === FALSE) {
 				return FALSE;
 			} else {
-				$start = $pos + strlen($word) + 1;
+				dump($start = $pos + strlen($word) + 1);
 			}
 		}
-		return $start;
+		return dump($start);
 	}
 }

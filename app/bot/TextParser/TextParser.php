@@ -142,6 +142,9 @@ class TextParser extends Object
 						$return .= "\n - <http://api.nette.org/2.2.2/{$match[1]}|$class>";
 					}
 				}
+				if(trim($return) === '') {
+					$return = 'Sorry, I couldn\'t find ' . $search . ' in Nette 2.2.2 API. Try searching <http://api.nette.org/2.2.2/index.html|Nette API> yourself.';
+				}
 				return $return;
 			} else {
 				$search = str_replace(' ', '_', $search);

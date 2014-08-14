@@ -87,6 +87,7 @@ class TextParser extends Object
 			($pos = WordFinder::findWords($text, 'show', 'docs')) || ($pos = WordFinder::findWords($text, 'show', 'doc')) || ($pos = WordFinder::findWords($text, 'show', 'documentation'))) {
 			$search = trim(substr($text, $pos - 1));
 			$before = trim(substr($text, 0, $pos));
+			$limit = (strpos($before, 'full') !== FALSE) ? 50 : 5;
 			if((strpos($search, $ch = '::') !== FALSE) || (strpos($search, $ch = '->') !== FALSE)) {
 				// find in Nette documentation (Class::method, Class->method)
 			} else if((strpos($search, $ch = '\\') !== FALSE) || (strpos($before, 'nette') !== FALSE)) {
@@ -126,7 +127,7 @@ class TextParser extends Object
 						$return .= "<http://api.nette.org/2.2.2/{$match[1]}|$class>:";
 						$counter = 0;
 						foreach($methods as $method) {
-							if($counter++ >= 5) break;
+							if($counter++ >= $limit) break;
 							$returnValue = $this->fixSpaces(trim(strip_tags($method[1])));
 							$href = $this->fixSpaces(trim(strip_tags($method[2])));
 							$methodName = $this->fixSpaces(trim(strip_tags($method[3])));
@@ -137,7 +138,7 @@ class TextParser extends Object
 						$counter = 0;
 						$return .= "\n    ...\n\n*You might also look for:*";
 					} else {
-						if($counter++ >= 5) break;
+						if($counter++ >= $limit) break;
 						$return .= "\n - <http://api.nette.org/2.2.2/{$match[1]}|$class>";
 					}
 				}

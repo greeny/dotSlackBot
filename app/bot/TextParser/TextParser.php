@@ -10,7 +10,6 @@ use greeny\SlackBot\Bot;
 use greeny\SlackBot\Command;
 use Latte\Object;
 use Nette\Http\Request;
-use Nette\Neon\Exception;
 use Nette\Utils\Strings;
 
 class TextParser extends Object
@@ -62,8 +61,8 @@ class TextParser extends Object
 				if(strpos($text, 'may refer to:')) { // we need to find <ul>s in <div
 
 				}
-				$text = Strings::replace($text, '~<a.*?href="(.*?)".*?>(.*?)</a>~', function($text) {
-					throw new Exception("<https://en.wikipedia.org{$text[1]}|{$text[2]}>");
+				$text = Strings::replace(strip_tags($text, '<a><b><i>'), '~<a.*?href="(.*?)".*?>(.*?)</a>~', function($text) {
+					return "<https://en.wikipedia.org{$text[1]}|{$text[2]}>";
 				});
 				$text = Strings::replace($text, '~<b>(.*?)</b>~', function($text) {
 					return '*' . $text[0] . '*';
@@ -71,7 +70,7 @@ class TextParser extends Object
 				$text = Strings::replace($text, '~<i>(.*?)</i>~', function($text) {
 					return '_' . $text[0] . '_';
 				});
-				return strip_tags($text) . "\n" .
+				return $text . "\n" .
 					str_repeat(' ', 40)."-- from <https://en.wikipedia.org/|Wikipedia, free encyclopedia> ( <https://en.wikipedia.org/wiki/$search|full article> )";
 			} else {
 				return "I don't know, try http://lmgtfy.com/?q=$search.";

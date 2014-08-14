@@ -5,6 +5,7 @@
 
 namespace greeny\SlackBot;
 
+use Nette\DI\Container;
 use Nette\Http\IRequest;
 use Nette\Object;
 
@@ -13,11 +14,13 @@ class Bot extends Object
 	const ID = 'USLACKBOT';
 
 	/** @var IAction[] */
-	private $actions;
+	private $actions = [];
 
-	public function __construct($actions)
+	public function __construct(Container $container)
 	{
-		$this->actions = $actions;
+		foreach($container->findByType('greeny\SlackBot\IAction') as $string) {
+			$this->actions[] = $container->getService($string);
+		}
 	}
 
 	/**

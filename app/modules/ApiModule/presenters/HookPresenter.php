@@ -9,7 +9,6 @@ use greeny\SlackBot\BasePresenter;
 use greeny\SlackBot\Bot;
 use Nette\Application\Responses\JsonResponse;
 
-
 class HookPresenter extends BasePresenter
 {
 	/** @var Bot @inject */

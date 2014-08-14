@@ -7,3 +7,4 @@ parameters:
 		password:
 		profiler: TRUE
 		lazy: yes
+	github:

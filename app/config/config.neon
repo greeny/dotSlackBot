@@ -26,15 +26,14 @@ services:
 	- greeny\SlackBot\Model\Mapper
 	- LeanMapper\DefaultEntityFactory
 
-	helloAction: greeny\SlackBot\HelloAction
-	helpAction: greeny\SlackBot\HelpAction
-	utilsAction: greeny\SlackBot\UtilsAction
+	- greeny\SlackBot\HelloAction
+	- greeny\SlackBot\HelpAction
+	- greeny\SlackBot\UtilsAction
 
-	- greeny\SlackBot\Bot([
-		@helloAction,
-		@helpAction,
-		@utilsAction
-	])
+	- greeny\Api\Drivers\CurlDriver
+	- greeny\SlackBot\Github\Github(%github%)
+
+	- greeny\SlackBot\Bot
 
 	- greeny\SlackBot\Model\UserRepository
 

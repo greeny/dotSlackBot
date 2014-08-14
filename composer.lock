@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "526fd80c24eadb23a905a8859cb8cf5b",
+    "hash": "453b7fd47f4e839dd10c65c2b5f2ac32",
     "packages": [
         {
             "name": "dg/texy",
@@ -121,6 +121,37 @@
                 "sqlite"
             ],
             "time": "2014-06-30 15:08:04"
+        },
+        {
+            "name": "greeny/api",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/greeny/API.git",
+                "reference": "60eedc6611fe6dcc1d3a19eaafee7a651668e884"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/greeny/API/zipball/60eedc6611fe6dcc1d3a19eaafee7a651668e884",
+                "reference": "60eedc6611fe6dcc1d3a19eaafee7a651668e884",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "nette/tester": "v1.2.0",
+                "tracy/tracy": "v2.2.2"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "description": "An API for making requests.",
+            "time": "2014-07-18 17:11:07"
         },
         {
             "name": "latte/latte",
@@ -1320,9 +1351,9 @@
 
     ],
     "minimum-stability": "stable",
-    "stability-flags": [
-
-    ],
+    "stability-flags": {
+        "greeny/api": 20
+    },
     "prefer-stable": false,
     "platform": {
         "php": ">= 5.3.0"

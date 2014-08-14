@@ -55,7 +55,7 @@ class TextParser extends Object
 			})));
 			$search = rtrim($search, '.!?,');
 			
-			$wikiPage = $this->api->createUrlRequest("https://en.wikipedia.org/wiki/$search")->send();
+			return $wikiPage = $this->api->createUrlRequest("https://en.wikipedia.org/wiki/$search")->send();
 			$matches = Strings::match($wikiPage, '~<p>(.*?)</p>~');
 			if($text = $matches[1]) {
 				return Strings::replace($text, '~<a.*?>(.*?)</a>', function($text) {

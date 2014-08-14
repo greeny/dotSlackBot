@@ -85,10 +85,64 @@ class TextParser extends Object
 			return $return;
 		} else if(($pos = WordFinder::findWords($text, 'show', 'docs', 'for')) || ($pos = WordFinder::findWords($text, 'show', 'doc', 'for')) || ($pos = WordFinder::findWords($text, 'show', 'documentation', 'for')) ||
 			($pos = WordFinder::findWords($text, 'show', 'docs')) || ($pos = WordFinder::findWords($text, 'show', 'doc')) || ($pos = WordFinder::findWords($text, 'show', 'documentation'))) {
-			$search = str_replace(' ', '_', trim(substr($text, $pos - 1)));
+			$search = trim(substr($text, $pos - 1));
 			if((strpos($search, $ch = '::') !== FALSE) || (strpos($search, $ch = '->') !== FALSE)) {
-				// find in Nette documentation
+				// find in Nette documentation (Class::method, Class->method)
+			} else if((strpos($search, $ch = '\\') !== FALSE)) {
+				$search = ltrim(str_replace(array(' ', '*', '\\'), array('.*?', '.*?', '\\\\'), $search), '\\');
+				$tree = $this->api->createUrlRequest('http://api.nette.org/2.2.2/index.html')->send();
+				$start = strpos($tree, '<div id="elements">');
+				$end = strpos(substr($tree, $start), '</div>');
+				$elementsPage = substr($tree, $start, $end);
+				$elements = Strings::matchAll($elementsPage, '~<li><a href="(.*?)">.*?' . $search . '(.*?)</a></li>~');
+				$directMatches = [];
+				$otherMatches = [];
+				$first = TRUE;
+				foreach($elements as $element) {
+					if(trim($element[2]) === '') {
+						$directMatches[] = $element;
+					} else {
+						$otherMatches[] = $element;
+					}
+				}
+				foreach($otherMatches as $match) {
+					$directMatches[] = $match;
+				}
+				$return = "";
+				$counter = 0;
+				foreach($directMatches as $match) {
+					$class = Strings::match($match[0], '~">(.+?)</a>~')[1];
+					if($first) {
+						$first = FALSE;
+						$classPage = $this->api->createUrlRequest("http://api.nette.org/2.2.2/{$match[1]}")->send();
+						if(($start = strpos($classPage, '<table class="summary" id="methods">')) !== NULL) {
+							$end = strpos(substr($classPage, $start), '</table>');
+							$methodsPage = str_replace("\n", '', trim(substr($classPage, $start, $end)));
+							$methods = Strings::matchAll($methodsPage, '~<td class="attributes">(.*?)</td>.*?<a href="(.*?)".*?>(.*?)</a>\((.*?)\).*?<div class="description short">(.*?)</div>~');
+						} else {
+							$methods = array();
+						}
+						$return .= "<http://api.nette.org/2.2.2/{$match[1]}|$class>:";
+						$counter = 0;
+						foreach($methods as $method) {
+							if($counter++ >= 5) break;
+							$returnValue = $this->fixSpaces(trim(strip_tags($method[1])));
+							$href = $this->fixSpaces(trim(strip_tags($method[2])));
+							$methodName = $this->fixSpaces(trim(strip_tags($method[3])));
+							$methodParams = $this->fixSpaces(trim(strip_tags($method[4])));
+							$methodDescription = $this->fixSpaces(trim(strip_tags($method[5])));
+							$return .= "\n    _{$returnValue}_ <http://api.nette.org/2.2.2/$href|$methodName> ($methodParams) - $methodDescription";
+						}
+						$counter = 0;
+						$return .= "\n    ...\n\n*You might also look for:*";
+					} else {
+						if($counter++ >= 5) break;
+						$return .= "\n - <{$match[1]}|$class>";
+					}
+				}
+				return $return;
 			} else {
+				$search = str_replace(' ', '_', $search);
 				$phpPage = $this->api->createUrlRequest("http://cz2.php.net/$search")->send();
 				if($phpPage === '') {
 					return 'Sorry, I couldn\'t find such a function. Try searching <http://php.net/search.php?pattern=' . $search . '|php.net> yourself.';
@@ -139,5 +193,10 @@ class TextParser extends Object
 		return Strings::replace($text, '~<a.*?href="(.*?)".*?>(.*?)</a>~', function($text) use($baseLinkHref) {
 			return !Strings::match($text[2], '~\[[0-9]+\]~') ? "<$baseLinkHref{$text[1]}|{$text[2]}>" : '';
 		});
+	}
+
+	private function fixSpaces($text)
+	{
+		return Strings::replace($text, '~[\s]+~', ' ');
 	}
 }

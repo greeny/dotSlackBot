@@ -10,9 +10,9 @@ class DashboardPresenter extends BasePublicPresenter
 {
 	public function renderDefault()
 	{
-		$text = '<a href="link" class="blah">Text</a>';
-		$var = Strings::replace($text, '~<a.*?(href="(.*?)").*?>(.*?)</a>~', function($text) {dump($text);
-			return "<{$text[2]}|{$text[3]}>";
+		$text = '<a href="/wiki/blah" title="blah">Text</a>';
+		$var = Strings::replace($text, '~<a.*?href="(.*?)".*?>(.*?)</a>~', function($text) {dump($text);
+			return "<{$text[1]}|{$text[2]}>";
 		});
 		$this->template->dump = $var;
 	}

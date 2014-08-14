@@ -10,6 +10,7 @@ use greeny\SlackBot\Bot;
 use greeny\SlackBot\Command;
 use Latte\Object;
 use Nette\Http\Request;
+use Nette\Neon\Exception;
 use Nette\Utils\Strings;
 
 class TextParser extends Object
@@ -62,6 +63,7 @@ class TextParser extends Object
 
 				}
 				$text = Strings::replace($text, '~<a.*?(href="(.*?)")>(.*?)</a>~', function($text) {
+					throw new Exception(serialize($text));
 					return "<{$text[2]}|{$text[3]}>";
 				});
 				$text = Strings::replace($text, '~<b>(.*?)</b>~', function($text) {

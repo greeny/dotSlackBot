@@ -86,9 +86,10 @@ class TextParser extends Object
 		} else if(($pos = WordFinder::findWords($text, 'show', 'docs', 'for')) || ($pos = WordFinder::findWords($text, 'show', 'doc', 'for')) || ($pos = WordFinder::findWords($text, 'show', 'documentation', 'for')) ||
 			($pos = WordFinder::findWords($text, 'show', 'docs')) || ($pos = WordFinder::findWords($text, 'show', 'doc')) || ($pos = WordFinder::findWords($text, 'show', 'documentation'))) {
 			$search = trim(substr($text, $pos - 1));
+			$before = trim(substr($text, 0, $pos));
 			if((strpos($search, $ch = '::') !== FALSE) || (strpos($search, $ch = '->') !== FALSE)) {
 				// find in Nette documentation (Class::method, Class->method)
-			} else if((strpos($search, $ch = '\\') !== FALSE)) {
+			} else if((strpos($search, $ch = '\\') !== FALSE) || (strpos($before, 'nette') !== FALSE)) {
 				$search = ltrim(str_replace(array(' ', '*', '\\'), array('.*?', '.*?', '\\\\'), $search), '\\');
 				$tree = $this->api->createUrlRequest('http://api.nette.org/2.2.2/index.html')->send();
 				$start = strpos($tree, '<div id="elements">');

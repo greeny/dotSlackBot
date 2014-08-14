@@ -107,9 +107,9 @@ class TextParser extends Object
 					$end = strpos(substr($phpPage, $start), '</div>') + 6;
 					$doc = str_replace("\n", '', substr($phpPage, $start, $end));
 					$params = Strings::matchAll($doc, '~<dt>.*?<code class="parameter">(.*?)</code>.*?</dt>.*?<dd>.*?<p class="para">(.*?)</p>.*?</dd>~');
-					$return = "*$method* _{$version}_\n$description.\n\n*$signature*";
+					$return = "<http://cz2.php.net/$method|$method> _{$version}_\n$description.\n\n*$signature*";
 					foreach($params as $param) {
-						$return .= "\n    _\${$param[1]}_ - " . trim($param[2]);
+						$return .= "\n    _\${$param[1]}_ - " . strip_tags(trim($param[2]));
 					}
 					return $return;
 				}

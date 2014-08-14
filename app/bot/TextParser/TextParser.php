@@ -62,8 +62,8 @@ class TextParser extends Object
 				if(strpos($text, 'may refer to:')) { // we need to find <ul>s in <div
 
 				}
-				$text = Strings::replace($text, '~<a.*?href="(.*?)".*?>(.*?)</a>~', function($text) {throw new Exception(serialize($text));
-					return "<https://en.wikipedia.org{$text[1]}|{$text[2]}>";
+				$text = Strings::replace($text, '~<a.*?href="(.*?)".*?>(.*?)</a>~', function($text) {
+					throw new Exception("<https://en.wikipedia.org{$text[1]}|{$text[2]}>");
 				});
 				$text = Strings::replace($text, '~<b>(.*?)</b>~', function($text) {
 					return '*' . $text[0] . '*';

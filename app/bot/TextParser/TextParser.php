@@ -58,9 +58,16 @@ class TextParser extends Object
 			$wikiPage = $this->api->createUrlRequest("https://en.wikipedia.org/wiki/$search")->send();
 			$matches = Strings::match($wikiPage, '~<p>(.*?)</p>~');
 			if($text = $matches[1]) {
-				return Strings::replace($text, '~<a.*?>(.*?)</a>~', function($text) {
+				$text = Strings::replace($text, '~<a.*?>(.*?)</a>~', function($text) {
 					return $text[1];
 				});
+				$text = Strings::replace($text, '~<b>(.*?)</b>~', function($text) {
+					return '*' . $text[0] . '*';
+				});
+				$text = Strings::replace($text, '~<i>(.*?)</i>~', function($text) {
+					return '_' . $text[0] . '_';
+				});
+				return strip_tags($text);
 			} else {
 				return "I don't know, try https://en.wikipedia.org/wiki/$search.";
 			}

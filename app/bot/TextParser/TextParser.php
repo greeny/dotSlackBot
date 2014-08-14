@@ -65,10 +65,13 @@ class TextParser extends Object
 					return "<https://en.wikipedia.org{$text[1]}|{$text[2]}>";
 				});
 				$text = Strings::replace($text, '~<b>(.*?)</b>~', function($text) {
-					return '*' . $text[0] . '*';
+					return '*' . $text[1] . '*';
 				});
 				$text = Strings::replace($text, '~<i>(.*?)</i>~', function($text) {
-					return '_' . $text[0] . '_';
+					return '_' . $text[1] . '_';
+				});
+				$text = Strings::replace($text, '~\[[0-9]\]~', function($text) {
+					return '_' . $text[1] . '_';
 				});
 				return $text . "\n" .
 					str_repeat(' ', 40)."-- from <https://en.wikipedia.org/|Wikipedia, free encyclopedia> ( <https://en.wikipedia.org/wiki/$search|full article> )";

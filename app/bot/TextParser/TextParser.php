@@ -61,27 +61,38 @@ class TextParser extends Object
 				if(strpos($text, 'may refer to:')) { // we need to find <ul>s in <div
 
 				}
-				$text = Strings::replace(strip_tags($text, '<a><b><i>'), '~<sup.*?>(.*?)</sup>~', function($text) {
+				$text = Strings::replace($text, '~<sup.*?>(.*?)</sup>~', function() {
 					return '';
 				});
-				$text = Strings::replace($text, '~<a.*?href="(.*?)".*?>(.*?)</a>~', function($text) {
-					return !Strings::match($text[2], '~\[[0-9]+\]~') ? "<https://en.wikipedia.org{$text[1]}|{$text[2]}>" : '';
-				});
-				$text = Strings::replace($text, '~<b>(.*?)</b>~', function($text) {
-					return '*' . $text[1] . '*';
-				});
-				$text = Strings::replace($text, '~<i>(.*?)</i>~', function($text) {
-					return '_' . $text[1] . '_';
-				});
-				$text = Strings::replace($text, '~\[[0-9]\]~', function($text) {
-					return '_' . $text[1] . '_';
-				});
+				$text = $this->formatResult($text, 'https://en.wikipedia.org');
 				return $text . "\n" .
 					str_repeat(' ', 40)."-- from <https://en.wikipedia.org/|Wikipedia, free encyclopedia> ( <https://en.wikipedia.org/wiki/$search|full article> )";
 			} else {
 				return "I don't know, try <http://lmgtfy.com/?q=$search|this bot>.";
 			}
+		} else if(($pos = WordFinder::findWords($text, 'how', 'to')) || ($pos = WordFinder::findWords($text, 'how', 'can', 'i')) || ($pos = WordFinder::findWords($text, 'how', 'can'))) {
+			$search = str_replace('+', '_', substr($text, $pos - 1));
+			$soPage = $this->api->createUrlRequest("http://stackoverflow.com/search?q=$search");
+			return "Try <http://stackoverflow.com/search?q=$search|this>.";
 		}
 		return NULL;
+	}
+
+	private function formatResult($text, $baseLinkHref = '')
+	{
+		$text = strip_tags($text, '<a><b><i>');
+		$text = Strings::replace($text, '~<a.*?href="(.*?)".*?>(.*?)</a>~', function($text) use($baseLinkHref) {
+			return !Strings::match($text[2], '~\[[0-9]+\]~') ? "<$baseLinkHref{$text[1]}|{$text[2]}>" : '';
+		});
+		$text = Strings::replace($text, '~<b>(.*?)</b>~', function($text) {
+			return '*' . $text[1] . '*';
+		});
+		$text = Strings::replace($text, '~<i>(.*?)</i>~', function($text) {
+			return '_' . $text[1] . '_';
+		});
+		$text = Strings::replace($text, '~\[[0-9]\]~', function($text) {
+			return '_' . $text[1] . '_';
+		});
+		return $text;
 	}
 }

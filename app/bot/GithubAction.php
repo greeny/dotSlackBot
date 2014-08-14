@@ -36,7 +36,6 @@ class GithubAction implements IAction
 	 */
 	function run(Command $command, IRequest $request, Bot $bot)
 	{
-		return serialize($command->getArgs());
 		if($command->getArg(0) === 'last') {
 			if($command->getArg(1) === 'commit') {
 				$commit = $this->github->getLastCommit();

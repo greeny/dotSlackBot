@@ -29,6 +29,7 @@ services:
 	- greeny\SlackBot\HelloAction
 	- greeny\SlackBot\HelpAction
 	- greeny\SlackBot\UtilsAction
+	- greeny\SlackBot\GithubAction
 
 	- greeny\Api\Drivers\CurlDriver
 	- greeny\SlackBot\Github\Github(%github%)

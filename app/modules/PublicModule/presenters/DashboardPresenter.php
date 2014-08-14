@@ -10,16 +10,10 @@ class DashboardPresenter extends BasePublicPresenter
 {
 	public function renderDefault()
 	{
-		$text = "what is tree?";
-		$var = NULL;
-		$pos = dump(WordFinder::findWords($text, 'what', 'is'));
-		if($pos) {
-			dump($pos);
-			$search = str_replace(' ', '_', trim(Strings::replace(substr($text, $pos - 1), '~\s([a-z]{1,1})~', function($match) {
-				return ' '.trim(strtoupper($match[0]));
-			})));
-			$var = rtrim($search, '.!?,');
-		}
+		$text = '<a href="link">Text</a>';
+		$var = Strings::replace($text, '~<a.*?(href="(.*?)")>(.*?)</a>~', function($text) {dump($text);
+			return "<{$text[2]}|{$text[3]}>";
+		});
 		$this->template->dump = $var;
 	}
 }

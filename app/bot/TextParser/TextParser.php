@@ -72,8 +72,17 @@ class TextParser extends Object
 			}
 		} else if(($pos = WordFinder::findWords($text, 'how', 'to')) || ($pos = WordFinder::findWords($text, 'how', 'can', 'i')) || ($pos = WordFinder::findWords($text, 'how', 'can'))) {
 			$search = str_replace(' ', '+', trim(substr($text, $pos - 1)));
-			$soPage = $this->api->createUrlRequest("http://stackoverflow.com/search?q=$search");
-			return "Try <http://stackoverflow.com/search?q=$search|this>.";
+			$soPage = $this->api->createUrlRequest("http://stackoverflow.com/search?q=$search")->send();
+			$matches = Strings::matchAll($soPage, '~<a.href="([^"]*?)".title="(.*?)".*?>~');
+			$return = 'Try one of these topics:';
+			$i = -1;
+			foreach($matches as $match) {
+				$i++;
+				if($i <= 2) continue;
+				if($i >= 8) break;
+				$return .= "\n - <http://stackoverflow.com$match[1]|$match[2]>";
+			}
+			return $return;
 		}
 		return NULL;
 	}
@@ -81,9 +90,7 @@ class TextParser extends Object
 	private function formatResult($text, $baseLinkHref = '')
 	{
 		$text = strip_tags($text, '<a><b><i>');
-		$text = Strings::replace($text, '~<a.*?href="(.*?)".*?>(.*?)</a>~', function($text) use($baseLinkHref) {
-			return !Strings::match($text[2], '~\[[0-9]+\]~') ? "<$baseLinkHref{$text[1]}|{$text[2]}>" : '';
-		});
+		$text = $this->findAndReplaceLinks($text, $baseLinkHref);
 		$text = Strings::replace($text, '~<b>(.*?)</b>~', function($text) {
 			return '*' . $text[1] . '*';
 		});
@@ -94,5 +101,12 @@ class TextParser extends Object
 			return '_' . $text[1] . '_';
 		});
 		return $text;
+	}
+
+	private function findAndReplaceLinks($text, $baseLinkHref = '')
+	{
+		return Strings::replace($text, '~<a.*?href="(.*?)".*?>(.*?)</a>~', function($text) use($baseLinkHref) {
+			return !Strings::match($text[2], '~\[[0-9]+\]~') ? "<$baseLinkHref{$text[1]}|{$text[2]}>" : '';
+		});
 	}
 }

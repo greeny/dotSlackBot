@@ -90,12 +90,11 @@ class TextParser extends Object
 				// find in Nette documentation (Class::method, Class->method)
 			} else if((strpos($search, $ch = '\\') !== FALSE)) {
 				$search = ltrim(str_replace(array(' ', '*', '\\'), array('.*?', '.*?', '\\\\'), $search), '\\');
-				return $search;
 				$tree = $this->api->createUrlRequest('http://api.nette.org/2.2.2/index.html')->send();
 				$start = strpos($tree, '<div id="elements">');
 				$end = strpos(substr($tree, $start), '</div>');
 				$elementsPage = substr($tree, $start, $end);
-				$elements = Strings::matchAll($elementsPage, '~<li><a href="(.*?)">.*?' . $search . '(.*?)</a></li>~');
+				$elements = Strings::matchAll($elementsPage, '~<li><a href="(.*?)">.*?' . $search . '(.*?)</a></li>~i');
 				$directMatches = [];
 				$otherMatches = [];
 				$first = TRUE;

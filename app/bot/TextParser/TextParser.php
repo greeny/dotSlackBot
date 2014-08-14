@@ -61,8 +61,11 @@ class TextParser extends Object
 				if(strpos($text, 'may refer to:')) { // we need to find <ul>s in <div
 
 				}
-				$text = Strings::replace(strip_tags($text, '<a><b><i>'), '~<a.*?href="(.*?)".*?>(.*?)</a>~', function($text) {
-					return "<https://en.wikipedia.org{$text[1]}|{$text[2]}>";
+				$text = Strings::replace(strip_tags($text, '<a><b><i>'), '~<sup.*?>(.*?)</sup>~', function($text) {
+					return '';
+				});
+				$text = Strings::replace($text, '~<a.*?href="(.*?)".*?>(.*?)</a>~', function($text) {
+					return !Strings::match($text[2], '~\[[0-9]+\]~') ? "<https://en.wikipedia.org{$text[1]}|{$text[2]}>" : '';
 				});
 				$text = Strings::replace($text, '~<b>(.*?)</b>~', function($text) {
 					return '*' . $text[1] . '*';
@@ -76,7 +79,7 @@ class TextParser extends Object
 				return $text . "\n" .
 					str_repeat(' ', 40)."-- from <https://en.wikipedia.org/|Wikipedia, free encyclopedia> ( <https://en.wikipedia.org/wiki/$search|full article> )";
 			} else {
-				return "I don't know, try http://lmgtfy.com/?q=$search.";
+				return "I don't know, try <http://lmgtfy.com/?q=$search|this bot>.";
 			}
 		}
 		return NULL;

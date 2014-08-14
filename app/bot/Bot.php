@@ -52,7 +52,7 @@ class Bot extends Object
 		$priority = -1;
 
 		foreach($this->getActions() as $action) {
-			if($action->match($command) && $action->getPriority() > $priority) {
+			if(($action->match($command)) && ($action->getPriority() > $priority)) {
 				$chosenAction = $action;
 			}
 		}
@@ -60,6 +60,6 @@ class Bot extends Object
 			return $chosenAction->run($command, $request, $this);
 		}
 
-		return 'Invalid command!';
+		return NULL;
 	}
 }

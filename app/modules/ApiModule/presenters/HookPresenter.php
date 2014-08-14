@@ -19,7 +19,7 @@ class HookPresenter extends BasePresenter
 		if($text = $this->bot->run($this->getHttpRequest(), $type)) {
 			$this->sendResponse(new JsonResponse([
 				'text' => $text,
-				'parse' => 'full',
+				'parse' => 'none',
 			]));
 		} else {
 			die;

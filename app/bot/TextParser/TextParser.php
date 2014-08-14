@@ -71,7 +71,7 @@ class TextParser extends Object
 				return "I don't know, try <http://lmgtfy.com/?q=$search|this bot>.";
 			}
 		} else if(($pos = WordFinder::findWords($text, 'how', 'to')) || ($pos = WordFinder::findWords($text, 'how', 'can', 'i')) || ($pos = WordFinder::findWords($text, 'how', 'can'))) {
-			$search = str_replace('+', '_', substr($text, $pos - 1));
+			$search = str_replace(' ', '+', trim(substr($text, $pos - 1)));
 			$soPage = $this->api->createUrlRequest("http://stackoverflow.com/search?q=$search");
 			return "Try <http://stackoverflow.com/search?q=$search|this>.";
 		}

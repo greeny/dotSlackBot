@@ -44,7 +44,7 @@ class Bot extends Object
 
 		$command = strtolower($request->getPost('text'));
 		if($type === NULL) { // with prefix
-			$command = str_replace($request->getPost('trigger_word'), '', $command);
+			$command = str_replace(strtolower($request->getPost('trigger_word')), '', $command);
 		}
 
 		$data = array_values(array_filter(explode(' ', $command)));

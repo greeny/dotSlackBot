@@ -13,20 +13,32 @@ class DashboardPresenter extends BasePublicPresenter
 
 	public function renderDefault()
 	{
-		$search = 'how+to+convert+integer+to+string+php';
 		Debugger::$maxLen = 1e6;
-		$soPage = $this->api->createUrlRequest("http://stackoverflow.com/search?q=$search")->send();
-		$matches = Strings::matchAll($soPage, '~<a.href="([^"]*?)".title="(.*?)".*?>~');
-		$return = 'Try one of these topics:';
-		$i = -1;
-		foreach($matches as $match) {
-			$i++;
-			if($i <= 2) continue;
-			if($i >= 8) break;
-			$return .= "\n - <http://stackoverflow.com$match[1]|$match[2]>";
+		$search = 'htmlspecialchars_decode';
+		$phpPage = $this->api->createUrlRequest("http://cz2.php.net/$search")->send();
+		if($phpPage === '') {
+			$var = 'Not found';
+		} else {
+			$method = Strings::match($phpPage, '~<h1 class="refname">(.*?)</h1>~')[1];
+			$version = Strings::match($phpPage, '~<p class="verinfo">(.*?)</p>~')[1];
+			$start = strpos($phpPage, '<p class="refpurpose">');
+			$end = strpos(substr($phpPage, $start), '</p>');
+			$description = trim(strip_tags(substr($phpPage, $start, $end)));
+			$description = trim(substr($description, strpos($description, '&mdash;') + strlen('&mdash;')));
+			$start = strpos($phpPage, '<div class="methodsynopsis dc-description">');
+			$end = strpos(substr($phpPage, $start), '</div>');
+			$signature = trim(strip_tags(substr($phpPage, $start, $end)));
+			$signature = str_replace("\n", '', $signature);
+			$start = strpos($phpPage, '<div class="refsect1 parameters"');
+			$end = strpos(substr($phpPage, $start), '</div>') + 6;
+			$doc = str_replace("\n", '', substr($phpPage, $start, $end));
+			$params = Strings::matchAll($doc, '~<dt>.*?<code class="parameter">(.*?)</code>.*?</dt>.*?<dd>.*?<p class="para">(.*?)</p>.*?</dd>~');
+			$return = "*$method* _{$version}_\n$description.\n\n*$signature*";
+			foreach($params as $param) {
+				$return .= "\n    _\${$param[1]}_ - " . trim($param[2]);
+			}
+			$var = $return;
 		}
-		dump($var = $return);
-		dump($soPage);
 
 		$this->template->dump = $var;
 	}

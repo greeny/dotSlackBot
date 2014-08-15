@@ -91,7 +91,7 @@ class TextParser extends Object
 			if((strpos($search, $ch = '::') !== FALSE) || (strpos($search, $ch = '->') !== FALSE)) {
 				// find in Nette documentation (Class::method, Class->method)
 			} else if((strpos($search, $ch = '\\') !== FALSE) || (strpos($before, 'nette') !== FALSE)) {
-				$search = ltrim(str_replace(array(' ', '*', '\\'), array('.*?', '.*?', '\\\\'), $search), '\\');
+				$search = ltrim(str_replace(array(' ', '*', '\\'), array('.*?', '.*?', '\\\\'), $this->fixSpaces($search)), '\\');
 				$tree = $this->api->createUrlRequest('http://api.nette.org/2.2.2/index.html')->send();
 				$start = strpos($tree, '<div id="elements">');
 				$end = strpos(substr($tree, $start), '</div>');

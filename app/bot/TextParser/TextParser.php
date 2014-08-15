@@ -262,6 +262,8 @@ class TextParser extends Object
 		} else if(($pos = WordFinder::findWords($text, 'thank', 'you')) || ($pos = WordFinder::findWords($text, 'thanks')) ||
 			($pos = WordFinder::findWords($text, 'thx')) || ($pos = WordFinder::findWords($text, 'ty'))) {
 			return "No problem, I am glad i could help!";
+		} else if($text === 'cool' || $text === 'nice' || $text === 'great') {
+			return "I did my best.";
 		}
 		return NULL;
 	}

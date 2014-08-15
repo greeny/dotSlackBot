@@ -39,7 +39,7 @@ class GithubAction implements IAction
 		if($command->getArg(0) === 'last') {
 			if($command->getArg(1) === 'commit') {
 				$commit = $this->github->getLastCommit();
-				return '*dotblue/booklidays*: <' . $commit->html_url . '|' . Strings::truncate($commit->commit->message, 50) . '>' . ' by ' .
+				return '*<https://github.com/dotblue/booklidays|dotblue/booklidays>*: <' . $commit->html_url . '|' . $commit->commit->message . '>' . ' by ' .
 				' <' . $commit->committer->html_url . '|' . $commit->committer->login . '>';
 			}
 		}

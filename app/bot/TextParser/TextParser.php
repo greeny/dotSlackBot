@@ -89,7 +89,58 @@ class TextParser extends Object
 			$before = trim(substr($text, 0, $pos));
 			$limit = (strpos($before, 'full') !== FALSE) ? 50 : 5;
 			if((strpos($search, $ch = '::') !== FALSE) || (strpos($search, $ch = '->') !== FALSE)) {
-				// find in Nette documentation (Class::method, Class->method)
+				$parts = explode($ch, $search, 2);
+				$className = trim($this->fixSpaces($parts[0]));
+				$className = ltrim(str_replace(array(' ', '*', '\\'), array('.*?', '.*?', '\\\\'), $className), '\\');
+				$searchMethod = trim(strtolower(str_replace(' ', '', $parts[1])));
+				$tree = $this->api->createUrlRequest('http://api.nette.org/2.2.2/index.html')->send();
+				$start = strpos($tree, '<div id="elements">');
+				$end = strpos(substr($tree, $start), '</div>');
+				$elementsPage = substr($tree, $start, $end);
+				$elements = Strings::matchAll($elementsPage, '~<li><a href="(.*?)">.*?' . $className . '(.*?)</a></li>~i');
+				$directMatches = [];
+				$otherMatches = [];
+				$first = TRUE;
+				foreach($elements as $element) {
+					if(trim($element[2]) === '') {
+						$directMatches[] = $element;
+					} else {
+						$otherMatches[] = $element;
+					}
+				}
+				foreach($otherMatches as $match) {
+					$directMatches[] = $match;
+				}
+				$return = "";
+				foreach($directMatches as $match) {
+					$class = Strings::match($match[0], '~">(.+?)</a>~')[1];
+					if($first) {
+						$classPage = $this->api->createUrlRequest("http://api.nette.org/2.2.2/{$match[1]}")->send();
+						if(($start = strpos($classPage, '<table class="summary" id="methods">')) !== NULL) {
+							$end = strpos(substr($classPage, $start), '</table>');
+							$methodsPage = str_replace("\n", '', trim(substr($classPage, $start, $end)));
+							$methods = Strings::matchAll($methodsPage, '~<td class="attributes">(.*?)</td>.*?<a href="(.*?)".*?>(.*?)</a>\((.*?)\).*?<div class="description detailed hidden">(.*?)</div></td>~');
+						} else {
+							$methods = array();
+						}
+						foreach($methods as $method) {
+							$methodName = $this->fixSpaces(trim(strip_tags($method[3])));
+							if(strtolower($methodName) === $searchMethod) {
+								$first = FALSE;
+								$returnValue = $this->fixSpaces(trim(strip_tags($method[1])));
+								$href = $this->fixSpaces(trim(strip_tags($method[2])));
+								$methodParams = $this->fixSpaces(trim(strip_tags($method[4])));
+								$methodDescription = $this->fixSpaces(trim(strip_tags($method[5])));
+								$return .= "_{$returnValue}_ <http://api.nette.org/2.2.2/{$match[1]}|$class>::";
+								$return .= "<http://api.nette.org/2.2.2/$href|$methodName> ($methodParams)\n$methodDescription";
+							}
+						}
+					}
+				}
+				if(trim($return) === '') {
+					$return = 'Sorry, I couldn\'t find ' . $className . '::' . $searchMethod .'() in Nette 2.2.2 API. Try searching <http://api.nette.org/2.2.2/index.html|Nette API> yourself.';
+				}
+				return $return;
 			} else if((strpos($search, $ch = '\\') !== FALSE) || (strpos($before, 'nette') !== FALSE)) {
 				$search = ltrim(str_replace(array(' ', '*', '\\'), array('.*?', '.*?', '\\\\'), $this->fixSpaces($search)), '\\');
 				$tree = $this->api->createUrlRequest('http://api.nette.org/2.2.2/index.html')->send();

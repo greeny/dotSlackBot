@@ -50,15 +50,14 @@ class Bot extends Object
 
 		$chosenAction = NULL;
 		$priority = -1;
-		$return = '';
 		foreach($this->getActions() as $action) {
 			if(($matched = $action->match($command)) && ($action->getPriority() > $priority)) {
 				$chosenAction = $action;
+				$priority = $action->getPriority();
 			}
-			$return .= "$matched ".get_class($action) . "\n";
 		}
 		if($chosenAction) {
-			return $return . "Command:" . $command->getCommand() . "\n" . $chosenAction->run($command, $request, $this);
+			return $chosenAction->run($command, $request, $this);
 		}
 
 		return NULL;

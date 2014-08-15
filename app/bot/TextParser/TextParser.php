@@ -49,6 +49,7 @@ class TextParser extends Object
 	private function parseText($text)
 	{
 		$pos = NULL;
+		$text = str_replace(['&lt;', '&gt;'], ['<', '>'], $text);
 		if(($pos = WordFinder::findWords($text, 'what', 'is')) || ($pos = WordFinder::findWords($text, 'what', 'could', 'be'))) {
 			$search = str_replace(' ', '_', trim(Strings::replace(substr($text, $pos - 1), '~\s([a-z]{1,1})~', function($match) {
 				return ' '.trim(strtoupper($match[0]));

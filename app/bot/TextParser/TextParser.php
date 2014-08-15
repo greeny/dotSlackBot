@@ -152,12 +152,12 @@ class TextParser extends Object
 
 								$overrides = Strings::match($method[5], '~<h4>Overrides</h4>.*?<div class="list">(.*?)</div>~');
 								if($overrides) {
-									$other .= "\n*Overrides*\n    " . trim($this->findAndReplaceLinks(strip_tags($overrides[1], '<a>')));
+									$other .= "\n*Overrides*\n    " . trim($this->findAndReplaceLinks(strip_tags($overrides[1], '<a>'), 'http://api.nette.org/2.2.2/'));
 								}
 
 								$implements = Strings::match($method[5], '~<h4>Implementation of</h4>.*?<div class="list">(.*?)</div>~');
 								if($implements) {
-									$other .= "\n*Implementation of*\n    " . trim($this->findAndReplaceLinks(strip_tags($implements[1], '<a>')));
+									$other .= "\n*Implementation of*\n    " . trim($this->findAndReplaceLinks(strip_tags($implements[1], '<a>'), 'http://api.nette.org/2.2.2/'));
 								}
 
 								$return .= "_{$returnValue}_ <http://api.nette.org/2.2.2/{$match[1]}|$class>::";

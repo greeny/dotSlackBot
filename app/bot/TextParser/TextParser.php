@@ -131,9 +131,37 @@ class TextParser extends Object
 								$returnValue = $this->fixSpaces(trim(strip_tags($method[1])));
 								$href = $this->fixSpaces(trim(strip_tags($method[2])));
 								$methodParams = $this->fixSpaces(trim(strip_tags($method[4])));
-								$methodDescription = $this->fixSpaces(trim(strip_tags($method[5])));
+								$returns = Strings::match($method[5], '~<h4>Returns</h4>.*?<div class="list">(.*?)</div>~');
+								if($returns) {
+									$returns = "*Returns*\n    " . trim($this->findAndReplaceLinks(strip_tags($returns[1], '<a>'), 'http://api.nette.org/2.2.2/'));
+								} else {
+									$returns = "*No return value*";
+								}
+
+								$params = Strings::match($method[5], '~<h4>Parameters</h4>.*?<dl>(.*?)</dl>~');
+								if($params) {
+									$paramsText = "*Parameters*";
+									foreach(Strings::matchAll($params[1], '~<var>(.*?)</var>.*?<dd><code>(.*?)</code>(.*?)</dd>~') as $p) {
+										$paramsText .= "\n    _" . $this->findAndReplaceLinks(strip_tags($p[2], '<a>'), 'http://api.nette.org/2.2.2/') . "_ $p[1]" . (trim(strip_tags($p[3])) !== '' ? " - ".strip_tags($p[3]) : '');
+									}
+								} else {
+									$paramsText = "*No parameters*";
+								}
+
+								$other = '';
+
+								$overrides = Strings::match($method[5], '~<h4>Overrides</h4>.*?<div class="list">(.*?)</div>~');
+								if($overrides) {
+									$other .= "\n*Overrides*\n    " . trim($this->findAndReplaceLinks(strip_tags($overrides[1], '<a>')));
+								}
+
+								$implements = Strings::match($method[5], '~<h4>Implementation of</h4>.*?<div class="list">(.*?)</div>~');
+								if($implements) {
+									$other .= "\n*Implementation of*\n    " . trim($this->findAndReplaceLinks(strip_tags($implements[1], '<a>')));
+								}
+
 								$return .= "_{$returnValue}_ <http://api.nette.org/2.2.2/{$match[1]}|$class>::";
-								$return .= "<http://api.nette.org/2.2.2/$href|$methodName> ($methodParams)\n$methodDescription";
+								$return .= "<http://api.nette.org/2.2.2/$href|$methodName> ($methodParams)\n$returns\n$paramsText$other";
 							}
 						}
 					}

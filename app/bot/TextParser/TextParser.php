@@ -135,15 +135,15 @@ class TextParser extends Object
 							$methodDescription = $this->fixSpaces(trim(strip_tags($method[5])));
 							$return .= "\n    _{$returnValue}_ <http://api.nette.org/2.2.2/$href|$methodName> ($methodParams) - $methodDescription";
 						}
+						if($counter < count($methods)) $return .= "\n    ...\n\n";
 						$counter = 0;
-						if($limit > 5) $return .= "\n    ...\n\n";
 						$return .= "*You might also look for:*";
 					} else {
 						if($counter++ >= $limit) break;
 						$return .= "\n - <http://api.nette.org/2.2.2/{$match[1]}|$class>";
 					}
 				}
-				if($limit > 5) $return .= "\n ...";
+				if($counter < count($directMatches)) $return .= "\n ...";
 				if(trim($return) === '') {
 					$return = 'Sorry, I couldn\'t find ' . $search . ' in Nette 2.2.2 API. Try searching <http://api.nette.org/2.2.2/index.html|Nette API> yourself.';
 				}

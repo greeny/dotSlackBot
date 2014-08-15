@@ -14,7 +14,7 @@ class DashboardPresenter extends BasePublicPresenter
 	public function renderDefault()
 	{
 		Debugger::$maxLen = 1e6;
-		$search = '$presenter->run($a, $b)';
+		$search = '$presenter->run($a, $b);';
 		$parts = array();
 		if((strpos($search, $ch = '::') !== FALSE) || (strpos($search, $ch = '->') !== FALSE)) {
 			$parts = explode($ch, $search, 2);
@@ -22,7 +22,7 @@ class DashboardPresenter extends BasePublicPresenter
 		//
 		$className = trim($this->fixSpaces($parts[0]));
 		$className = ltrim(str_replace(array(' ', '*', '\\'), array('.*?', '.*?', '\\\\'), $className), '\\$');
-		$searchMethod = trim(Strings::replace(strtolower(str_replace(' ', '', $parts[1])), '~\(.*?\)~', ''));
+		$searchMethod = trim(Strings::replace(strtolower(str_replace(' ', '', $parts[1])), '~\(.*?\).*?;?~', ''));
 		$tree = $this->api->createUrlRequest('http://api.nette.org/2.2.2/index.html')->send();
 		$start = strpos($tree, '<div id="elements">');
 		$end = strpos(substr($tree, $start), '</div>');

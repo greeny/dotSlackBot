@@ -93,7 +93,7 @@ class TextParser extends Object
 				$parts = explode($ch, $search, 2);
 				$className = trim($this->fixSpaces($parts[0]));
 				$className = ltrim(str_replace(array(' ', '*', '\\'), array('.*?', '.*?', '\\\\'), $className), '\\$');
-				$searchMethod = trim(Strings::replace(strtolower(str_replace(' ', '', $parts[1])), '~\(.*?\)~', ''));
+				$searchMethod = trim(Strings::replace(strtolower(str_replace(' ', '', $parts[1])), '~\(.*?\).*?;?~', ''));
 				$tree = $this->api->createUrlRequest('http://api.nette.org/2.2.2/index.html')->send();
 				$start = strpos($tree, '<div id="elements">');
 				$end = strpos(substr($tree, $start), '</div>');

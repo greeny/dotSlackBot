@@ -136,12 +136,14 @@ class TextParser extends Object
 							$return .= "\n    _{$returnValue}_ <http://api.nette.org/2.2.2/$href|$methodName> ($methodParams) - $methodDescription";
 						}
 						$counter = 0;
-						$return .= "\n    ...\n\n*You might also look for:*";
+						if($limit > 5) $return .= "\n    ...\n\n";
+						$return .= "*You might also look for:*";
 					} else {
 						if($counter++ >= $limit) break;
 						$return .= "\n - <http://api.nette.org/2.2.2/{$match[1]}|$class>";
 					}
 				}
+				if($limit > 5) $return .= "\n ...";
 				if(trim($return) === '') {
 					$return = 'Sorry, I couldn\'t find ' . $search . ' in Nette 2.2.2 API. Try searching <http://api.nette.org/2.2.2/index.html|Nette API> yourself.';
 				}

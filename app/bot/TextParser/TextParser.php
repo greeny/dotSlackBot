@@ -135,9 +135,9 @@ class TextParser extends Object
 							$methodDescription = $this->fixSpaces(trim(strip_tags($method[5])));
 							$return .= "\n    _{$returnValue}_ <http://api.nette.org/2.2.2/$href|$methodName> ($methodParams) - $methodDescription";
 						}
-						if($counter < count($methods)) $return .= "\n    ...\n\n";
+						if($counter < count($methods)) $return .= "\n    ...";
 						$counter = 0;
-						$return .= "*You might also look for:*";
+						$return .= "\n\n*You might also look for:*";
 					} else {
 						if($counter++ >= $limit) break;
 						$return .= "\n - <http://api.nette.org/2.2.2/{$match[1]}|$class>";

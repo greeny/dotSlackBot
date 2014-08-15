@@ -136,7 +136,7 @@ class TextParser extends Object
 							$return .= "\n    _{$returnValue}_ <http://api.nette.org/2.2.2/$href|$methodName> ($methodParams) - $methodDescription";
 						}
 						if($counter < count($methods)) $return .= "\n    ...";
-						$counter = 0;
+						$counter = 1;
 						$return .= "\n\n*You might also look for:*";
 					} else {
 						if($counter++ >= $limit) break;
